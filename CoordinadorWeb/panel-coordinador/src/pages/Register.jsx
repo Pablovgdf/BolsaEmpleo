@@ -1,36 +1,35 @@
-// ARCHIVO: src/pages/Login.jsx
+// ARCHIVO: src/pages/Register.jsx
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault(); // Evita que se recargue la página
+  const handleRegister = async (e) => {
+    e.preventDefault();
     setError(null);
 
     try {
-      // Intentamos loguear con Firebase
-      await signInWithEmailAndPassword(auth, email, password);
-      // Si funciona, nos lleva al Dashboard
-      navigate('/dashboard');
-    } catch (error) {
-      // Si falla, mostramos el error
-      console.error(error);
-      setError("Error: Usuario o contraseña incorrectos");
+      // Crear el usuario en Firebase
+      await createUserWithEmailAndPassword(auth, email, password);
+      // Redirigir al login después de registrar
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setError('Error al registrar el usuario');
     }
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2>Acceso Coordinadores</h2>
-        <form onSubmit={handleLogin} style={styles.form}>
+        <h2>Registro Coordinadores</h2>
+        <form onSubmit={handleRegister} style={styles.form}>
           <input
             type="email"
             placeholder="Correo del colegio"
@@ -47,23 +46,22 @@ const Login = () => {
             style={styles.input}
             required
           />
-          <button type="submit" style={styles.button}>Entrar</button>
+          <button type="submit" style={styles.button}>Registrar</button>
         </form>
-        <button onClick={() => navigate('/register')} style={styles.registerButton}>Crear cuenta</button>
+        <button onClick={() => navigate('/')} style={styles.backButton}>Volver al login</button>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
     </div>
   );
 };
 
-// Unos estilos básicos para que no se vea feo
 const styles = {
   container: { display: 'flex', justifyContent: 'center', marginTop: '50px' },
   card: { border: '1px solid #ccc', padding: '20px', borderRadius: '8px', width: '300px', textAlign: 'center' },
   form: { display: 'flex', flexDirection: 'column', gap: '10px' },
   input: { padding: '10px', fontSize: '16px' },
-  button: { padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', cursor: 'pointer', fontSize: '16px' },
-  registerButton: { padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer', fontSize: '16px', marginTop: '10px' }
+  button: { padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer', fontSize: '16px' },
+  backButton: { padding: '10px', backgroundColor: '#6c757d', color: 'white', border: 'none', cursor: 'pointer', fontSize: '16px', marginTop: '10px' }
 };
 
-export default Login;
+export default Register;

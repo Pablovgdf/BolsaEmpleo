@@ -5,6 +5,7 @@ import { auth } from './firebase/config';
 import { onAuthStateChanged } from 'firebase/auth';
 import NavBar from './Components/NavBar';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Eventos from './pages/Eventos';
 
@@ -34,6 +35,8 @@ function App() {
       <Routes>
         {/* Ruta para el Login */}
         <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Login />} />
+        {/* Ruta para el registro */}
+        <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
         
         {/* Rutas del Panel (protegidas) */}
         <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
