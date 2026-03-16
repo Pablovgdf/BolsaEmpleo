@@ -29,7 +29,7 @@ const Login = () => {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2>Acceso Coordinadores</h2>
+        <h2>Acceso Coordinadores 3.0</h2>
         <form onSubmit={handleLogin} style={styles.form}>
           <input
             type="email"
