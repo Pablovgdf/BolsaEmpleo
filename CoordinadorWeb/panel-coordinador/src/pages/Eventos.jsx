@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase/config';
-import { collection, addDoc, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 export default function Eventos() {
   const [formData, setFormData] = useState({
@@ -13,6 +13,8 @@ export default function Eventos() {
 
   const [eventos, setEventos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [editEventId, setEditEventId] = useState(null);
+  const [editEvento, setEditEvento] = useState({ titulo: '', ponente: '', fecha: '', lugar: '', descripcion: '' });
 
   // Cargar eventos en tiempo real
   useEffect(() => {
@@ -73,6 +75,53 @@ export default function Eventos() {
       alert(`❌ Error al crear el evento: ${errMsg}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEditStart = (evento) => {
+    setEditEventId(evento.id);
+    setEditEvento({
+      titulo: evento.titulo || '',
+      ponente: evento.ponente || '',
+      fecha: evento.fecha || '',
+      lugar: evento.lugar || '',
+      descripcion: evento.descripcion || '',
+    });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditEvento((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!editEvento.titulo || !editEvento.ponente || !editEvento.fecha || !editEvento.lugar) {
+      alert('Completa todos los campos antes de guardar.');
+      return;
+    }
+    try {
+      const ref = doc(db, 'eventos', editEventId);
+      await updateDoc(ref, {
+        ...editEvento,
+      });
+      setEditEventId(null);
+      setEditEvento({ titulo: '', ponente: '', fecha: '', lugar: '', descripcion: '' });
+      alert('✅ Evento actualizado correctamente');
+    } catch (error) {
+      console.error('Error actualizando evento', error);
+      alert('❌ Error al actualizar el evento');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('¿Eliminar este evento?')) return;
+    try {
+      await deleteDoc(doc(db, 'eventos', id));
+      alert('Evento eliminado');
+    } catch (error) {
+      console.error('Error eliminando evento', error);
+      alert('No se pudo eliminar el evento.');
     }
   };
 
@@ -325,21 +374,56 @@ export default function Eventos() {
                   e.currentTarget.style.transform = 'translateX(0)';
                 }}
               >
-                <h3 style={eventTitleStyle}>🎯 {evento.titulo}</h3>
-                <div style={eventDetailsStyle}>
-                  <strong>👤 Ponente:</strong> {evento.ponente}
-                </div>
-                <div style={eventDetailsStyle}>
-                  <strong>📅 Fecha:</strong> {parseFecha(evento.fecha) ? parseFecha(evento.fecha).toLocaleDateString('es-ES') : 'Fecha no válida'}
-                </div>
-                <div style={eventDetailsStyle}>
-                  <strong>📍 Lugar:</strong> {evento.lugar}
-                </div>
-                {evento.descripcion && (
-                  <div style={eventDescriptionStyle}>
-                    <strong>📝 Descripción:</strong>
-                    <p>{evento.descripcion}</p>
-                  </div>
+                {editEventId === evento.id ? (
+                  <form onSubmit={handleUpdate}>
+                    <div style={formGroupStyle}>
+                      <label style={labelStyle}>📌 Título *</label>
+                      <input name="titulo" value={editEvento.titulo} onChange={handleEditChange} style={inputStyle} />
+                    </div>
+                    <div style={formGroupStyle}>
+                      <label style={labelStyle}>👤 Ponente *</label>
+                      <input name="ponente" value={editEvento.ponente} onChange={handleEditChange} style={inputStyle} />
+                    </div>
+                    <div style={formGroupStyle}>
+                      <label style={labelStyle}>📅 Fecha *</label>
+                      <input name="fecha" type="date" value={editEvento.fecha} onChange={handleEditChange} style={inputStyle} />
+                    </div>
+                    <div style={formGroupStyle}>
+                      <label style={labelStyle}>📍 Lugar *</label>
+                      <input name="lugar" value={editEvento.lugar} onChange={handleEditChange} style={inputStyle} />
+                    </div>
+                    <div style={formGroupStyle}>
+                      <label style={labelStyle}>📝 Descripción</label>
+                      <textarea name="descripcion" value={editEvento.descripcion} onChange={handleEditChange} style={textareaStyle} />
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button type="submit" style={buttonStyle}>Guardar</button>
+                      <button type="button" style={{ ...buttonStyle, backgroundColor: '#ef4444' }} onClick={() => setEditEventId(null)}>Cancelar</button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <h3 style={eventTitleStyle}>🎯 {evento.titulo}</h3>
+                    <div style={eventDetailsStyle}>
+                      <strong>👤 Ponente:</strong> {evento.ponente}
+                    </div>
+                    <div style={eventDetailsStyle}>
+                      <strong>📅 Fecha:</strong> {parseFecha(evento.fecha) ? parseFecha(evento.fecha).toLocaleDateString('es-ES') : 'Fecha no válida'}
+                    </div>
+                    <div style={eventDetailsStyle}>
+                      <strong>📍 Lugar:</strong> {evento.lugar}
+                    </div>
+                    {evento.descripcion && (
+                      <div style={eventDescriptionStyle}>
+                        <strong>📝 Descripción:</strong>
+                        <p>{evento.descripcion}</p>
+                      </div>
+                    )}
+                    <div style={{ marginTop: '10px', display: 'flex', gap: '8px' }}>
+                      <button style={{ ...buttonStyle, backgroundColor: '#22c55e' }} onClick={() => handleEditStart(evento)}>Editar</button>
+                      <button style={{ ...buttonStyle, backgroundColor: '#ef4444' }} onClick={() => handleDelete(evento.id)}>Eliminar</button>
+                    </div>
+                  </>
                 )}
               </div>
             ))}

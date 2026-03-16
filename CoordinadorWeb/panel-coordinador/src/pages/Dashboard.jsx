@@ -1,6 +1,8 @@
 // ARCHIVO: src/pages/Dashboard.jsx
 import { useState, useEffect } from 'react';
 import { db } from '../firebase/config';
+import { auth } from '../firebase/config';
+import { signOut } from 'firebase/auth';
 import { collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 
 const Dashboard = () => {
@@ -154,7 +156,18 @@ const Dashboard = () => {
     <div style={styles.container}>
       <header style={styles.header}>
         <h2>Panel del Coordinador</h2>
-        <button style={styles.logoutBtn} onClick={() => window.location.href='/'}>Salir</button>
+        <button
+          style={styles.logoutBtn}
+          onClick={async () => {
+            try {
+              await signOut(auth);
+              window.location.href = '/';
+            } catch (error) {
+              console.error('Error al cerrar sesión:', error);
+              alert('No se pudo cerrar sesión. Intenta de nuevo.');
+            }
+          }}
+        >Salir</button>
       </header>
 
       <div style={styles.formCard}>
