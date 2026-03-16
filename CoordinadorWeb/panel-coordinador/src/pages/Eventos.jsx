@@ -35,6 +35,13 @@ export default function Eventos() {
     }));
   };
 
+  const parseFecha = (fecha) => {
+    if (!fecha) return null;
+    if (fecha?.toDate) return fecha.toDate();
+    const parsed = new Date(fecha);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -62,7 +69,8 @@ export default function Eventos() {
       alert('✅ Evento creado exitosamente');
     } catch (error) {
       console.error('Error al crear evento:', error);
-      alert('❌ Error al crear el evento');
+      const errMsg = error?.message ? `${error.message}` : 'error desconocido';
+      alert(`❌ Error al crear el evento: ${errMsg}`);
     } finally {
       setLoading(false);
     }
@@ -322,7 +330,7 @@ export default function Eventos() {
                   <strong>👤 Ponente:</strong> {evento.ponente}
                 </div>
                 <div style={eventDetailsStyle}>
-                  <strong>📅 Fecha:</strong> {new Date(evento.fecha).toLocaleDateString('es-ES')}
+                  <strong>📅 Fecha:</strong> {parseFecha(evento.fecha) ? parseFecha(evento.fecha).toLocaleDateString('es-ES') : 'Fecha no válida'}
                 </div>
                 <div style={eventDetailsStyle}>
                   <strong>📍 Lugar:</strong> {evento.lugar}

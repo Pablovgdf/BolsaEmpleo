@@ -67,7 +67,8 @@ const Dashboard = () => {
 
     } catch (error) {
       console.error("Error al guardar: ", error);
-      setMensaje("Hubo un error al guardar.");
+      const msg = error?.message ? error.message : 'Error desconocido al guardar.';
+      setMensaje(`❌ ${msg}`);
     }
   };
 
