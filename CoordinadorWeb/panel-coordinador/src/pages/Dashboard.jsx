@@ -24,7 +24,23 @@ const Dashboard = () => {
   const [mensaje, setMensaje] = useState(""); // Para decir "Guardado con éxito"
 
   // Lista de ciclos disponibles
-  const listaCiclos = ["DAM", "DAW", "ASIR", "SMR"];
+  const listaCiclos = [
+    "Técnico superior en Desarrollo de Aplicaciones Web",
+    "Técnico superior en Desarrollo de Aplicaciones Multiplataforma",
+    "Técnico superior en Administración de Sistemas Informáticos en Red",
+    "Técnico superior en Gestión de Alojamientos Turísticos en Madrid",
+    "Técnico superior en Administración y Finanzas en Madrid",
+    "Técnico superior en Enseñanza y Animación Sociodeportiva",
+    "Técnico superior en Acondicionamiento Físico",
+    "Técnico superior en Radioterapia y Dosimetría",
+    "Técnico superior en Imagen para el Diagnóstico y Medicina Nuclear",
+    "Técnico superior en Educación Infantil",
+    "Técnico en Sistemas Microinformáticos y Redes",
+    "Técnico en Gestión Administrativa",
+    "Técnico en Guía en el Medio Natural y de Tiempo Libre",
+    "Técnico en Cuidados Auxiliares de Enfermería",
+    "Técnico en Emergencias Sanitarias"
+  ];
 
   // 2. Función que maneja los inputs de texto
   const handleChange = (e) => {
@@ -221,10 +237,9 @@ const Dashboard = () => {
           <h3 style={{ margin: 0, color: '#fff' }}>Ofertas publicadas</h3>
           <select value={filtroCiclo} onChange={handleFiltroCambio} style={styles.select}>
             <option value="TODOS">Todos los ciclos</option>
-            <option value="DAM">DAM</option>
-            <option value="DAW">DAW</option>
-            <option value="ASIR">ASIR</option>
-            <option value="SMR">SMR</option>
+            {listaCiclos.map((ciclo) => (
+              <option key={ciclo} value={ciclo}>{ciclo}</option>
+            ))}
           </select>
         </div>
 
