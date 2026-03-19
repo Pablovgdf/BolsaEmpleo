@@ -20,10 +20,14 @@ export default function Eventos() {
   useEffect(() => {
     const q = query(collection(db, 'eventos'), orderBy('fecha', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const eventosData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const eventosData = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          asistentes: typeof data.asistentes === 'number' ? data.asistentes : 0,
+          ...data,
+        };
+      });
       setEventos(eventosData);
     });
     return unsubscribe;
@@ -56,6 +60,7 @@ export default function Eventos() {
     try {
       await addDoc(collection(db, 'eventos'), {
         ...formData,
+        asistentes: 0,
         createdAt: new Date(),
       });
       
@@ -412,6 +417,9 @@ export default function Eventos() {
                     </div>
                     <div style={eventDetailsStyle}>
                       <strong>📍 Lugar:</strong> {evento.lugar}
+                    </div>
+                    <div style={eventDetailsStyle}>
+                      <strong>👥 Asistentes:</strong> {evento.asistentes ?? 0}
                     </div>
                     {evento.descripcion && (
                       <div style={eventDescriptionStyle}>
