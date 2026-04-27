@@ -56,6 +56,16 @@ export default function Eventos() {
       return;
     }
 
+    // Validar que la fecha no sea anterior a la actual
+    const fechaEvento = new Date(formData.fecha);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Comparar solo fechas, sin hora
+    
+    if (fechaEvento < hoy) {
+      alert('❌ No puedes crear eventos con fecha anterior a la actual');
+      return;
+    }
+
     setLoading(true);
     try {
       await addDoc(collection(db, 'eventos'), {
@@ -105,6 +115,17 @@ export default function Eventos() {
       alert('Completa todos los campos antes de guardar.');
       return;
     }
+
+    // Validar que la fecha no sea anterior a la actual
+    const fechaEvento = new Date(editEvento.fecha);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    if (fechaEvento < hoy) {
+      alert('❌ No puedes establecer una fecha anterior a la actual');
+      return;
+    }
+
     try {
       const ref = doc(db, 'eventos', editEventId);
       await updateDoc(ref, {
