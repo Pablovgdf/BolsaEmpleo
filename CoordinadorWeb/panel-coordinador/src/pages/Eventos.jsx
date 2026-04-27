@@ -62,7 +62,7 @@ export default function Eventos() {
     hoy.setHours(0, 0, 0, 0); // Comparar solo fechas, sin hora
     
     if (fechaEvento < hoy) {
-      alert('❌ No puedes crear eventos con fecha anterior a la actual');
+      alert('No puedes crear eventos con fecha anterior a la actual');
       return;
     }
 
@@ -83,11 +83,11 @@ export default function Eventos() {
         descripcion: '',
       });
       
-      alert('✅ Evento creado exitosamente');
+      alert('Evento creado exitosamente');
     } catch (error) {
       console.error('Error al crear evento:', error);
       const errMsg = error?.message ? `${error.message}` : 'error desconocido';
-      alert(`❌ Error al crear el evento: ${errMsg}`);
+      alert(`Error al crear el evento: ${errMsg}`);
     } finally {
       setLoading(false);
     }
@@ -122,7 +122,7 @@ export default function Eventos() {
     hoy.setHours(0, 0, 0, 0);
     
     if (fechaEvento < hoy) {
-      alert('❌ No puedes establecer una fecha anterior a la actual');
+      alert('No puedes establecer una fecha anterior a la actual');
       return;
     }
 
@@ -133,10 +133,10 @@ export default function Eventos() {
       });
       setEditEventId(null);
       setEditEvento({ titulo: '', ponente: '', fecha: '', lugar: '', descripcion: '' });
-      alert('✅ Evento actualizado correctamente');
+      alert('Evento actualizado correctamente');
     } catch (error) {
       console.error('Error actualizando evento', error);
-      alert('❌ Error al actualizar el evento');
+      alert('Error al actualizar el evento');
     }
   };
 
@@ -283,11 +283,11 @@ export default function Eventos() {
     <div style={containerStyle}>
       {/* Formulario */}
       <section style={sectionStyle}>
-        <h2 style={titleStyle}>➕ Crear Nuevo Evento</h2>
+        <h2 style={titleStyle}>Crear Nuevo Evento</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div style={formGroupStyle}>
-              <label style={labelStyle}>📌 Título *</label>
+              <label style={labelStyle}>Título *</label>
               <input
                 type="text"
                 name="titulo"
@@ -301,7 +301,7 @@ export default function Eventos() {
             </div>
 
             <div style={formGroupStyle}>
-              <label style={labelStyle}>👤 Ponente *</label>
+              <label style={labelStyle}>Ponente *</label>
               <input
                 type="text"
                 name="ponente"
@@ -315,7 +315,7 @@ export default function Eventos() {
             </div>
 
             <div style={formGroupStyle}>
-              <label style={labelStyle}>📅 Fecha *</label>
+              <label style={labelStyle}>Fecha *</label>
               <input
                 type="date"
                 name="fecha"
@@ -328,7 +328,7 @@ export default function Eventos() {
             </div>
 
             <div style={formGroupStyle}>
-              <label style={labelStyle}>📍 Lugar *</label>
+              <label style={labelStyle}>Lugar *</label>
               <input
                 type="text"
                 name="lugar"
@@ -343,7 +343,7 @@ export default function Eventos() {
           </div>
 
           <div style={formGroupStyle}>
-            <label style={labelStyle}>📝 Descripción</label>
+            <label style={labelStyle}>Descripción</label>
             <textarea
               name="descripcion"
               value={formData.descripcion}
@@ -370,14 +370,14 @@ export default function Eventos() {
             }}
             disabled={loading}
           >
-            {loading ? '⏳ Guardando...' : '💾 Guardar Evento'}
+            {loading ? 'Guardando...' : 'Guardar Evento'}
           </button>
         </form>
       </section>
 
       {/* Lista de Eventos */}
       <section style={sectionStyle}>
-        <h2 style={titleStyle}>📅 Eventos Programados</h2>
+        <h2 style={titleStyle}>Eventos Programados</h2>
         
         {eventos.length === 0 ? (
           <div style={noEventsStyle}>
@@ -403,23 +403,23 @@ export default function Eventos() {
                 {editEventId === evento.id ? (
                   <form onSubmit={handleUpdate}>
                     <div style={formGroupStyle}>
-                      <label style={labelStyle}>📌 Título *</label>
+                      <label style={labelStyle}>Título *</label>
                       <input name="titulo" value={editEvento.titulo} onChange={handleEditChange} style={inputStyle} />
                     </div>
                     <div style={formGroupStyle}>
-                      <label style={labelStyle}>👤 Ponente *</label>
+                      <label style={labelStyle}>Ponente *</label>
                       <input name="ponente" value={editEvento.ponente} onChange={handleEditChange} style={inputStyle} />
                     </div>
                     <div style={formGroupStyle}>
-                      <label style={labelStyle}>📅 Fecha *</label>
+                      <label style={labelStyle}>Fecha *</label>
                       <input name="fecha" type="date" value={editEvento.fecha} onChange={handleEditChange} style={inputStyle} />
                     </div>
                     <div style={formGroupStyle}>
-                      <label style={labelStyle}>📍 Lugar *</label>
+                      <label style={labelStyle}>Lugar *</label>
                       <input name="lugar" value={editEvento.lugar} onChange={handleEditChange} style={inputStyle} />
                     </div>
                     <div style={formGroupStyle}>
-                      <label style={labelStyle}>📝 Descripción</label>
+                      <label style={labelStyle}>Descripción</label>
                       <textarea name="descripcion" value={editEvento.descripcion} onChange={handleEditChange} style={textareaStyle} />
                     </div>
                     <div style={{ display: 'flex', gap: '8px' }}>
@@ -429,22 +429,22 @@ export default function Eventos() {
                   </form>
                 ) : (
                   <>
-                    <h3 style={eventTitleStyle}>🎯 {evento.titulo}</h3>
+                    <h3 style={eventTitleStyle}>{evento.titulo}</h3>
                     <div style={eventDetailsStyle}>
-                      <strong>👤 Ponente:</strong> {evento.ponente}
+                      <strong>Ponente:</strong> {evento.ponente}
                     </div>
                     <div style={eventDetailsStyle}>
-                      <strong>📅 Fecha:</strong> {parseFecha(evento.fecha) ? parseFecha(evento.fecha).toLocaleDateString('es-ES') : 'Fecha no válida'}
+                      <strong>Fecha:</strong> {parseFecha(evento.fecha) ? parseFecha(evento.fecha).toLocaleDateString('es-ES') : 'Fecha no válida'}
                     </div>
                     <div style={eventDetailsStyle}>
-                      <strong>📍 Lugar:</strong> {evento.lugar}
+                      <strong>Lugar:</strong> {evento.lugar}
                     </div>
                     <div style={eventDetailsStyle}>
-                      <strong>👥 Asistentes:</strong> {evento.asistentes ?? 0}
+                      <strong>Asistentes:</strong> {evento.asistentes ?? 0}
                     </div>
                     {evento.descripcion && (
                       <div style={eventDescriptionStyle}>
-                        <strong>📝 Descripción:</strong>
+                        <strong>Descripción:</strong>
                         <p>{evento.descripcion}</p>
                       </div>
                     )}

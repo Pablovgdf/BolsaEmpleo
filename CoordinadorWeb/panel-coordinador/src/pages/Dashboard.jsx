@@ -152,7 +152,7 @@ const Dashboard = () => {
         activa: true
       });
 
-      setMensaje("¡Oferta publicada correctamente! 🚀");
+      setMensaje("Oferta publicada correctamente!");
       
       // Limpiamos el formulario
       setFormData({ titulo: '', empresa: '', descripcion: '', link: '' });
@@ -164,7 +164,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error al guardar: ", error);
       const msg = error?.message ? error.message : 'Error desconocido al guardar.';
-      setMensaje(`❌ ${msg}`);
+      setMensaje(msg);
     }
   };
 

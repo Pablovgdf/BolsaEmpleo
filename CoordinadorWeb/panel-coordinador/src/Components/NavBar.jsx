@@ -58,7 +58,7 @@ export default function NavBar() {
           to="/eventos"
           style={location.pathname === '/eventos' ? activeLinkStyle : linkStyle}
         >
-          📅 Eventos
+          Eventos
         </Link>
       </div>
     </nav>
